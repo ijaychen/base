@@ -10,6 +10,7 @@
 #include <iostream>
 #include <assert.h>
 #include <string.h>
+#include <string>
 #include <vector>
 #include "global.h"
 namespace base{
@@ -22,12 +23,22 @@ public:
 		m_storage.reserve(size);
 	}
 
-	Packet_Base(const Packet_Base & rhs) : m_storage(rhs.m_storage), m_pos(0){}
+	Packet_Base(const Packet_Base & rhs, size_t size = 0x1000) : m_storage(rhs.m_storage), m_pos(0)
+	{
+		m_storage.reserve(size);
+	}
+
 	void WriteUInt(uint32_t val)
 	{
 		PutByte(reinterpret_cast<const char *>(&val), 4);
 	}
 
+	void WriteString(const char * src)
+	{
+		uint16_t len = strlen(src);
+		PutByte(reinterpret_cast<const char *>(&len), 2);
+		PutByte(src, len);
+	}
 
 	uint32_t ReadUInt()
 	{
@@ -36,7 +47,22 @@ public:
 		return val;
 	}
 
-	
+	void ReadString(std::string &str)
+	{
+		uint16_t len;
+		GetByte(reinterpret_cast<char *>(&len), 2);
+		str.resize(len);
+		char * dst = const_cast<char*>(str.c_str());
+		GetByte(dst, len);
+	}
+
+	std::string ReadString()
+	{
+		std::string str;
+		ReadString(str);
+		return str;
+	}
+
 private:
 	void PutByte(const char * src, size_t count)
 	{
