@@ -9,13 +9,25 @@
 
 namespace game_server
 {
+
+class Input_Buffer;
+class OutPut_Buffer;
+
 class Player
 {
 public:
 	Player(int _socket);
 
+	bool RecvPacket();
+	bool SendPacket();
+
+	bool OperatorCommand();
+
 private:
 	int m_nSocket;
+	Input_Buffer * m_pInputBuffer;
+	OutPut_Buffer * m_pOutputBuffer;
+	
 };
 
 }

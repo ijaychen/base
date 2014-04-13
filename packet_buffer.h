@@ -51,11 +51,14 @@ public:
 		return true;
 	}
 	
-	void FillBuffer(const char * src, size_t len)
+	bool FillBuffer(const char * src, size_t len)
 	{
 		if(m_nFreeSize < len)
 		{
-			DoubleSize();
+			if(!DoubleSize())
+			{
+				return false;
+			}
 		}
 		if(m_nBeginPos >= m_nEndPos)
 		{
@@ -78,6 +81,7 @@ public:
 			}
 		}
 		m_nFreeSize -= len;
+		return true;
 	}
 protected:
 	size_t m_nBufferSize;
@@ -99,14 +103,14 @@ public:
 		m_pTempBuffer = new char[m_nBufferSize];
 	}
 
-	void FillInputBuffer()
+	bool FillInputBuffer()
 	{
 		memset(m_pTempBuffer, 0, sizeof(m_pTempBuffer));
 		int len = read(m_nSocket, m_pTempBuffer, DEFAULT_BUFFER_SIZE/2);
 		if(-1 == len || 0 == len)
 		{
 			//player logout
-			return;
+			return ;
 		}
 		FillBuffer(m_pTempBuffer, len);
 	}
@@ -173,10 +177,10 @@ private:
 	char * m_pTempBuffer;
 };
 
-class OutPut_Buffer : public Packet_Buffer
+class Output_Buffer : public Packet_Buffer
 {
 public:
-	OutPut_Buffer(int _socket, size_t _nBufferSize = DEFAULT_BUFFER_SIZE) 
+	Output_Buffer(int _socket, size_t _nBufferSize = DEFAULT_BUFFER_SIZE) 
 		: Packet_Buffer(_socket, _nBufferSize)
 	{
 
@@ -188,8 +192,10 @@ public:
 		FillBuffer(src, len);	
 	}
 
-	void SendPacket()
+	bool SendPacket()
 	{
+		if(m_nFreeSize == m_nBufferSize)
+			return false;
 		int rightLen;
 		if(m_nBeginPos < m_nEndPos)
 		{
@@ -203,6 +209,7 @@ public:
 		}
 		m_nBeginPos = 0;
 		m_nEndPos = 0;
+		return true;
 	}
 private:
 
