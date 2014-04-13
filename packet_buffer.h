@@ -141,21 +141,33 @@ public:
 		{
 			return false;
 		}
-		ReadBuffer(pack, len);
-		return true;
+		return ReadBuffer((char*)&pack, len);
 	}
 
 private:
-	bool ReadBuffer(WorldPacket & pack, int len)
+	bool ReadBuffer(char *pack, int len)
 	{
 		if(m_nBeginPos < m_nEndPos)
 		{
-			memcpy((char*)(&pack), m_pBuffer[m_nBeginPos], len);
+			memcpy(pack, &m_pBuffer[m_nBeginPos], len);
 		}
 		else
 		{
-			
+			int rightLen = m_nBufferSize - m_nBeginPos;
+			if(len <= rightLen)
+			{
+				memcpy(pack, &m_pBuffer[m_nBeginPos], len);
+			}
+			else
+			{
+				memcpy(pack, &m_pBuffer[m_nBeginPos], rightLen);
+				memcpy(&pack[rightLen], &m_pBuffer[0], len - rightLen);
+			}
 		}
+		m_nFreeSize += len;
+		m_nBeginPos = (m_mBeginPos + len) % m_nBufferSize;
+		return true;
+	}
 
 private:
 	char * m_pTempBuffer;

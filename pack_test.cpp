@@ -18,5 +18,8 @@ int main()
 
 	base::PacketIn PkIn(PkOut.FetchData());
 	PkIn.test();
+
+	std::cout << sizeof(base::PacketOut) << std::endl;
+	std::cout << sizeof(base::PacketIn) << std::endl;
 	return 0;
 }

@@ -25,20 +25,13 @@ void put(uint8 *src, int count)
 	cout << &vec[0] << endl;
 }
 
+#include "packet_buffer.h"
+
 int main()
 {
-	cout << sizeof(char) << endl;
-	cout << sizeof(short) << endl;
-	cout << sizeof(int) << endl;
-	cout << sizeof(long) << endl;
-	cout << sizeof(float) << endl;
-	cout << sizeof(double) << endl;
-	int a = 65;
-	put((uint8*)&a, sizeof(a));
-
-	cout << __FILE__ << endl;
-	
-	cout << __LINE__ << endl;
-
+	game_server::Input_Buffer pb(3);
+	pb.FillBuffer("ab", 2);
+	cout << pb.GetBufferSize() << endl;
+	cout << "packet size: " << pb.GetPacketSize() << endl;
 	return 0;
 }
