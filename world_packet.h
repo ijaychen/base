@@ -13,7 +13,7 @@ namespace base{
 class WorldPacket : public Packet_Base
 {
 public:
-	WorldPacket(uint32_t _opCode) : m_opCode(_opCode){}
+	WorldPacket(uint32_t _opCode = 0) : m_opCode(_opCode){}
 	WorldPacket(const WorldPacket & pack) 
 		: m_opCode(pack.GetOpCode()), Packet_Base(pack)
 	{}

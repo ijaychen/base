@@ -24,6 +24,7 @@ public:
 	bool OperatorCommand();
 
 private:
+	unsigned int m_nPlayerId;
 	int m_nSocket;
 	Input_Buffer * m_pInputBuffer;
 	OutPut_Buffer * m_pOutputBuffer;

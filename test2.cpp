@@ -4,8 +4,10 @@
 	> Created Time: Thu 10 Apr 2014 11:20:53 AM CST
  ************************************************************************/
 
+#include "world_session.h"
 #include "packet_base.h"
 #include "world_packet.h"
+#include "world_session.h"
 #include <iostream>
 using namespace std;
 int main()
@@ -19,5 +21,8 @@ int main()
 	cout << packIn.ReadUInt() << endl; 
 	cout << packIn.ReadUInt() << endl;
 	cout << packIn.ReadString() << endl;
+
+	game_server::WorldSession ws;
+	ws.Test();
 	return 0;
 }

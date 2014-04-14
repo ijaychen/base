@@ -44,7 +44,14 @@ bool Player::OperatorCommand()
 		//log
 		return false;
 	}
-	g_handlerMgr
+	PacketHandler pkHandler = g_handlerMgr->GetHandler(nOpCode);
+	if(pkHandler.handler)
+		pkHandler.handler(packet);
+	else
+	{
+		//log
+		return false;
+	}
 	return true;
 }
 

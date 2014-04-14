@@ -10,12 +10,12 @@ typedef unsigned char uint8_t;
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;
 typedef unsigned long uint64_t;
-
+/*
 #include <iostream>
 bool PrintError(const char * fileName, int lineNum)
 {
 	std::cout << "exception in file: " << fileName << "\tline: " << lineNum << std::endl;
 	return false;
 }
-
+*/
 #endif
